@@ -59,27 +59,31 @@ const Table=()=>{
 
     return (
         <>
-
+        
         <div >
             <input style={mystyle} onChange={(e)=>filterBySearchData(e.target.value)} type="text" placeholder="Search by name,email or role.."/>
         </div>
 
          <table>
+          <thead>
             <tr>
                <th> <input type="checkbox"  /></th>
                <th>Name</th>
                <th>Email</th>
                <th>Role</th>               
                <th>Actions</th>
-            </tr>              
+            </tr>  
+           </thead>
+            <tbody>            
               {
                 filterTableData.map((data)=>
                     (                    
-                     <tr>
+                     <tr key={data.id}>
                       {getRows(data)}
                      </tr>)
                 )  
               }
+            </tbody> 
          </table>
 
          

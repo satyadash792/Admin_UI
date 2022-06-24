@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-// import { FaRegTrashAlt } from "react-icons/fa";
-// import {  BiEdit  } from "react-icons/bi";
-import { GrNext,GrPrevious } from "react-icons/gr";
 import EditableRow from './EditableRow';
 import ReadRow from './ReadRow';
-import './Table.css';
+import Pagination from './Pagination';
+import './style.css';
 import axios from 'axios';
 
 const Table=()=>{
@@ -19,10 +17,11 @@ const Table=()=>{
     const [editRowId, setEditRowId]=useState(null);
     const [editFormData, setEditFormData] = useState({
       id:"",
-      fullName: "",
+      name: "",
       email: "",
       role:""
     });
+    const [user, setUser]=useState([])
 
     //Get Data By calling the api
     const getTableData=async()=>{
@@ -65,7 +64,7 @@ const Table=()=>{
 
     const formValues = {
       id:rowValue.id,
-      fullName: rowValue.name,
+      name: rowValue.name,
       email: rowValue.email,
       role: rowValue.role
     };
@@ -87,14 +86,14 @@ const Table=()=>{
      e.preventDefault()
      const value={
       id:editFormData.id,
-      name:editFormData.fullName,
+      name:editFormData.name,
       email:editFormData.email,
       role:editFormData.role
      }
-     const newTableData = [...tableData];
+     const newTableData = [...filterTableData];
      const index = newTableData.findIndex((row) => row.id === editRowId);
-     newTableData[index] = value;
-     setTableData(newTableData)
+     newTableData[index] = editFormData;
+    //  setTableData(newTableData)
      setFilterTableData(newTableData)
      setEditRowId(null)
   }
@@ -102,17 +101,46 @@ const Table=()=>{
     setEditRowId(null);
   }
 
+  const handleDeleteMultiple=(e)=>{
+
+    const filterId=[]
+    const res=document.querySelectorAll(".checkbox")
+     Array.from(res).forEach((input)=>{
+       if(input.checked){
+          filterId.push(input.name)
+         }
+
+        const res=filterTableData.filter((rowData)=>{
+           return !filterId.includes(rowData.id)
+        })
+        // setTableData(res)
+        setFilterTableData(res)
+    })
+    debugger
+  }
+
+  const handleCheckBox=(e)=>{
+    const {name,checked}=e.target
+    let checkedBox=tableData.map( user => user.id==name ? {...user , isChecked: checked}: user )
+    setUser(checkedBox)
+    console.log(checked)
+    console.log(e.target.checked)
+    debugger;
+  }
     return (
         <>
-        
+        {/* SearchBar */}
         <div >
             <input style={mystyle} onChange={(e)=>filterBySearchData(e.target.value)} type="text" placeholder="Search by name,email or role.."/>
         </div>
 
+        {/* Table Section */}
          <table>
           <thead>
             <tr>
-               <th> <input type="checkbox"  /></th>
+               <th> <input type="checkbox" name="allChecked"
+                // checked={}
+                onChange={(e)=>handleCheckBox(e)}/></th>
                <th>Name</th>
                <th>Email</th>
                <th>Role</th>               
@@ -125,8 +153,15 @@ const Table=()=>{
                   <tr key={data.id}>
                   {editRowId === data.id ?
                       <EditableRow editFormData={editFormData} handleEditRowValue={handleEditRowValue } 
-                      handleCancelClick={handleCancelClick} handleSaveLink={handleSaveLink}/> :
-                      <ReadRow rowValue={data} deleteRow={deleteRowValue} handleEditClick={handleEditClick}/>                    
+                      handleCancelClick={handleCancelClick} handleSaveLink={handleSaveLink}
+                      handleCheckBox={handleCheckBox}
+                      // checked={user?.isChecked || false}
+                      /> :
+                      <ReadRow rowValue={data} deleteRow={deleteRowValue} 
+                      handleEditClick={handleEditClick}
+                      handleCheckBox={handleCheckBox}
+                      // checked={user?.isChecked || false}
+                      />                    
                   }
                   </tr>
                 )  
@@ -134,19 +169,9 @@ const Table=()=>{
             </tbody> 
          </table>
 
-         
+         {/* Pagination */}
          <div style={mystyle} >
-            <button className="delete-multiple">
-                                       <span className='semi-circle'></span>
-                                       <span className='rectangle'>Delete Selected</span>
-                                       <span className='semi-circle'></span>
-            </button>
-            <button className="circle">1</button>
-            <button className="circle">2</button>
-            <button className="circle">3</button>
-            <button className="circle">4</button>
-            <button className="circle"><GrNext/></button>
-            <button className="circle"><GrPrevious/></button>
+            <Pagination handleDeleteMultiple={handleDeleteMultiple}/>
          </div>
         </>
       );

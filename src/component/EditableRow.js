@@ -1,17 +1,17 @@
 import React from "react";
 
-const EditableRow = ({editFormData,handleEditRowValue,handleCancelClick,handleSaveLink}) => {
+const EditableRow = ({editFormData,handleEditRowValue,handleCancelClick,handleSaveLink,handleCheckBox}) => {
   return (
     <>
-    <td><input type="checkbox"/></td>
+    <td><input type="checkbox"  name={editFormData.id}  className="checkbox" onChange={(e)=>handleCheckBox(e)}/></td>
      <td>     
          <input
           type="text"
           required="required"
           placeholder="Enter a name..."
-          name="fullName"
+          name="name"
           onChange={handleEditRowValue }
-          value={editFormData.fullName}
+          value={editFormData.name}
         ></input>
      </td>
      <td>     

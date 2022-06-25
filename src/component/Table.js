@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import EditableRow from './EditableRow';
 import ReadRow from './ReadRow';
-// import Pagination from './Pagination';
+import Pagination from './Pagination';
 import './style.css';
 import axios from 'axios';
-const Pagination = React.lazy(() => import('./Pagination'));
+
 const Table=()=>{
     const mystyle = {  
         height: "20px",
@@ -13,6 +13,7 @@ const Table=()=>{
         };
 
     const [tableData, setTableData]=useState([]);
+    const [searchTableData, setSearchTableData]=useState([]);
     const [filterTableData, setFilterTableData]=useState([]);
     const [editRowId, setEditRowId]=useState(null);
     const [editFormData, setEditFormData] = useState({
@@ -31,16 +32,22 @@ const Table=()=>{
     const getTableData=async()=>{
         const data=await axios.get('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json');
         setTableData(data.data)
+        setSearchTableData(data.data)
         setFilterTableData(data.data)
     }
  
     //Delete Row value completely
     const deleteRowValue=(data)=>{
        const tableAfterDeletion = [...tableData];
-       const index = tableAfterDeletion.findIndex((row) => row.id === data);
+       const index = tableAfterDeletion.findIndex((row) => row.id == data);
        tableAfterDeletion.splice(index, 1);
        setTableData(tableAfterDeletion)
-       setFilterTableData(tableAfterDeletion)
+       
+       const tableAfterDeletionFilter = [...searchTableData];
+       const index2 = tableAfterDeletionFilter.findIndex((row) => row.id == data);
+       tableAfterDeletionFilter.splice(index2, 1);
+       setFilterTableData(tableAfterDeletionFilter)
+       setSearchTableData(tableAfterDeletionFilter)
     }
 
    
@@ -55,7 +62,8 @@ const Table=()=>{
        if(data.name.includes(SearchData) || data.email.includes(SearchData) || data.role.includes(SearchData))
         return data;  
     })
-    setFilterTableData(res)
+    setSearchTableData(res)
+    handlePagination(paginationDetails.page,paginationDetails.rowPerPage,res)
     return;
    }
 
@@ -79,7 +87,6 @@ const Table=()=>{
 
     const newFormData = { ...editFormData };
     newFormData[fieldName] = fieldValue;
-
     setEditFormData(newFormData);
   };
 
@@ -99,6 +106,8 @@ const Table=()=>{
      setTableData(newTableData2)
      setEditRowId(null)
   }
+
+  //cancel the edited rowdata
   const handleCancelClick=()=>{
     setEditRowId(null);
   }
@@ -106,17 +115,17 @@ const Table=()=>{
 
   //handle multiple deletion of table row
   const handleDeleteMultiple=(e)=>{
-
     const filterId=[]
     const res=document.querySelectorAll(".checkbox")
      Array.from(res).forEach((input)=>{
        if(input.checked){
           filterId.push(input.name)
          }
-       const filtertable=filterTableData.filter((rowData)=>{
+       const filtertable=searchTableData.filter((rowData)=>{
           return !filterId.includes(rowData.id)
        })
        setFilterTableData(filtertable)
+       setSearchTableData(filtertable)
 
         const table=tableData.filter((rowData)=>{
            return !filterId.includes(rowData.id)
@@ -138,12 +147,12 @@ const Table=()=>{
 
 
   //handle pagination
-  const handlePagination=(currentPage,postPerPage)=>{
-    debugger;
+  const handlePagination=(currentPage,postPerPage,data)=>{
+    setPaginationDetails({ page:currentPage,  rowPerPage:postPerPage})
     const startIndex=(currentPage-1)*postPerPage;
     const lastIndex=currentPage*postPerPage;
     console.log("start "+startIndex +"  last "+lastIndex)
-    const displayRow=tableData.slice(startIndex,lastIndex)
+    const displayRow=data.slice(startIndex,lastIndex)
     setFilterTableData(displayRow)
   }
 

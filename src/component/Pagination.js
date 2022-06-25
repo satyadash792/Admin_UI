@@ -3,14 +3,21 @@ import {  FaAngleDoubleLeft,FaAngleDoubleRight,FaAngleLeft,FaAngleRight} from "r
 
 const Pagination = ({tableData, filterTableData,handleDeleteMultiple, handlePagination}) => {
   const[currentPage,setCurrentPages]=useState(1)
-  const[postPerPage, setPostPerPage]=useState(5)
+  const[postPerPage, setPostPerPage]=useState(10)
 
-  const pageCount=Math.ceil(filterTableData.length/postPerPage)
+  let pageNumber=[]
+  for(let i=1;i<=Math.ceil(tableData.length/postPerPage);i++){
+    pageNumber.push(i)
+  }
+
+
+  const pageDetails=(e)=>{
+    console.log(e.target.innerText)
+  }
 
   useEffect(()=>{
-    handlePagination(currentPage,postPerPage)
-    debugger
-  },[tableData])
+    handlePagination(currentPage,postPerPage,filterTableData)
+  },[tableData,currentPage,postPerPage])
   return (  
         <> 
             <div id="main">
@@ -22,13 +29,14 @@ const Pagination = ({tableData, filterTableData,handleDeleteMultiple, handlePagi
             </button>
             </div>
             <div id="Pagination-button">
-            <button className="circle"><FaAngleLeft/></button>
             <button className="circle"><FaAngleDoubleLeft/></button>
-            <button className="circle">1</button>
-            <button className="circle">2</button>
-            <button className="circle">3</button>
-            <button className="circle">4</button>
-            <button className="circle">5</button>
+            <button className="circle"><FaAngleLeft/></button>
+            {
+              pageNumber.map((page)=>
+              (
+              <button className="circle" onClick={(e)=>pageDetails(e)}>{page}</button>
+              ))
+            }
             <button className="circle"><FaAngleRight/></button>
             <button className="circle"><FaAngleDoubleRight/></button>
             </div>

@@ -2,10 +2,12 @@ import React from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import {  BiEdit  } from "react-icons/bi";
 
-const ReadRow = ({rowValue,deleteRow,handleEditClick,handleCheckBox}) => {
+const ReadRow = ({inputBoxTest,rowValue,deleteRow,handleEditClick,handleCheckBox}) => {
+  console.log(inputBoxTest)
+  debugger;
   return (
         <>
-        <td><input  name={rowValue.id} 
+        <td><input  name={rowValue.id} checked={inputBoxTest}
         type="checkbox" className="checkbox" 
         onChange={(e)=>handleCheckBox(e)}/></td>
          <td className='name'>{rowValue.name}</td>

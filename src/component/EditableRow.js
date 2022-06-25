@@ -1,9 +1,11 @@
 import React from "react";
 
-const EditableRow = ({editFormData,handleEditRowValue,handleCancelClick,handleSaveLink,handleCheckBox}) => {
+const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelClick,handleSaveLink,handleCheckBox}) => {
+  console.log(inputBoxTest)
+  debugger;
   return (
     <>
-    <td><input type="checkbox"  name={editFormData.id}  className="checkbox" onChange={(e)=>handleCheckBox(e)}/></td>
+    <td><input type="checkbox" checked={inputBoxTest} name={editFormData.id}  className="checkbox" onChange={(e)=>handleCheckBox(e)}/></td>
      <td>     
          <input
           type="text"

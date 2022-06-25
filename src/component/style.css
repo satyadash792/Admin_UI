@@ -1,3 +1,4 @@
+/* Table.js */
 table {
     border-collapse: collapse;
     width: 90%;
@@ -67,4 +68,15 @@ table {
   }
   #wide {
     flex: 1;
+  }
+
+  /* Pagination.js */
+  .active{
+    background-color: white;
+  }
+  .passive{
+    background-color: blue;
+  }
+  .disabled{
+    background-color:grey;
   }

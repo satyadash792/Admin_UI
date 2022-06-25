@@ -137,12 +137,17 @@ const Table=()=>{
   //handle checkbox
   const handleCheckBox=(e)=>{
     const {name,checked}=e.target
+    if(name==="allChecked"){
+      debugger;
+      let checkedBox=filterTableData.map( user => {return {...user,isChecked: checked}} ) 
+      setFilterTableData(checkedBox)
+    }
+    else{
     console.log(user.id===name)
-    let checkedBox=tableData.map( user => user.id == name ? {...user , isChecked: checked}: user )
-    setUser(checkedBox)
-    console.log(checked)
-    console.log(e.target.checked)
+    let checkedBox=filterTableData.map( user => user.id == name ? {...user , isChecked: checked}: user )
+    setFilterTableData(checkedBox)
     debugger;
+    }
   }
 
 
@@ -168,6 +173,7 @@ const Table=()=>{
           <thead>
             <tr>
                <th> <input type="checkbox" name="allChecked" className='checkbox'
+               checked={filterTableData.filter((user)=>user?.isChecked !==true).length===0}
                 onChange={(e)=>handleCheckBox(e)}/></th>
                <th className='name'>Name</th>
                <th className='email'>Email</th>
@@ -182,10 +188,12 @@ const Table=()=>{
                   {editRowId === data.id ?
                       <EditableRow editFormData={editFormData} handleEditRowValue={handleEditRowValue } 
                       handleCancelClick={handleCancelClick} handleSaveLink={handleSaveLink}
+                      inputBoxTest={data?.isChecked || false}
                       handleCheckBox={handleCheckBox}
                       /> :
                       <ReadRow rowValue={data} deleteRow={deleteRowValue} 
                       handleEditClick={handleEditClick}
+                      inputBoxTest={data?.isChecked || false}
                       handleCheckBox={handleCheckBox}
                       />                    
                   }
@@ -200,6 +208,7 @@ const Table=()=>{
            {tableData.length ?
             <Pagination 
             tableData={tableData}
+            searchTableData={searchTableData}
             filterTableData={filterTableData}
             handleDeleteMultiple={handleDeleteMultiple} 
             handlePagination={handlePagination}/> : null}

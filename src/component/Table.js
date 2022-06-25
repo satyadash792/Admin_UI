@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import EditableRow from './EditableRow';
 import ReadRow from './ReadRow';
-import Pagination from './Pagination';
+// import Pagination from './Pagination';
 import './style.css';
 import axios from 'axios';
-
+const Pagination = React.lazy(() => import('./Pagination'));
 const Table=()=>{
     const mystyle = {  
         height: "20px",
@@ -22,6 +22,10 @@ const Table=()=>{
       role:""
     });
     const [user, setUser]=useState([])
+    const [paginationDetails, setPaginationDetails]=useState({
+      page:1,
+      rowPerPage:5
+    })
 
     //Get Data By calling the api
     const getTableData=async()=>{
@@ -32,9 +36,6 @@ const Table=()=>{
  
     //Delete Row value completely
     const deleteRowValue=(data)=>{
-      //  let tableAfterDeletion=tableData.filter((row)=>{
-      //   return row.id != data
-      //  })
        const tableAfterDeletion = [...tableData];
        const index = tableAfterDeletion.findIndex((row) => row.id === data);
        tableAfterDeletion.splice(index, 1);
@@ -58,7 +59,7 @@ const Table=()=>{
     return;
    }
 
-   //handle the table data when youy click omn edit button
+   // on click edit button store that data and enable the editing id
    const handleEditClick = (e, rowValue) => {
     setEditRowId(rowValue.id)
 
@@ -71,6 +72,7 @@ const Table=()=>{
     setEditFormData(formValues);
   };
 
+  //handle editing of column
    const handleEditRowValue = (event) => {
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -82,25 +84,27 @@ const Table=()=>{
   };
 
 
+  //handle saving of editing values
   const handleSaveLink= (e)=>{
+    debugger;
      e.preventDefault()
-     const value={
-      id:editFormData.id,
-      name:editFormData.name,
-      email:editFormData.email,
-      role:editFormData.role
-     }
      const newTableData = [...filterTableData];
      const index = newTableData.findIndex((row) => row.id === editRowId);
      newTableData[index] = editFormData;
-    //  setTableData(newTableData)
      setFilterTableData(newTableData)
+
+     const newTableData2 = [...tableData];
+     const index2 = newTableData2.findIndex((row) => row.id === editRowId);
+     newTableData2[index2] = editFormData;
+     setTableData(newTableData2)
      setEditRowId(null)
   }
   const handleCancelClick=()=>{
     setEditRowId(null);
   }
 
+
+  //handle multiple deletion of table row
   const handleDeleteMultiple=(e)=>{
 
     const filterId=[]
@@ -109,24 +113,40 @@ const Table=()=>{
        if(input.checked){
           filterId.push(input.name)
          }
+       const filtertable=filterTableData.filter((rowData)=>{
+          return !filterId.includes(rowData.id)
+       })
+       setFilterTableData(filtertable)
 
-        const res=filterTableData.filter((rowData)=>{
+        const table=tableData.filter((rowData)=>{
            return !filterId.includes(rowData.id)
         })
-        // setTableData(res)
-        setFilterTableData(res)
+        setTableData(table)      
     })
-    debugger
   }
 
+  //handle checkbox
   const handleCheckBox=(e)=>{
     const {name,checked}=e.target
-    let checkedBox=tableData.map( user => user.id==name ? {...user , isChecked: checked}: user )
+    console.log(user.id===name)
+    let checkedBox=tableData.map( user => user.id == name ? {...user , isChecked: checked}: user )
     setUser(checkedBox)
     console.log(checked)
     console.log(e.target.checked)
     debugger;
   }
+
+
+  //handle pagination
+  const handlePagination=(currentPage,postPerPage)=>{
+    debugger;
+    const startIndex=(currentPage-1)*postPerPage;
+    const lastIndex=currentPage*postPerPage;
+    console.log("start "+startIndex +"  last "+lastIndex)
+    const displayRow=tableData.slice(startIndex,lastIndex)
+    setFilterTableData(displayRow)
+  }
+
     return (
         <>
         {/* SearchBar */}
@@ -138,13 +158,12 @@ const Table=()=>{
          <table>
           <thead>
             <tr>
-               <th> <input type="checkbox" name="allChecked"
-                // checked={}
+               <th> <input type="checkbox" name="allChecked" className='checkbox'
                 onChange={(e)=>handleCheckBox(e)}/></th>
-               <th>Name</th>
-               <th>Email</th>
-               <th>Role</th>               
-               <th>Actions</th>
+               <th className='name'>Name</th>
+               <th className='email'>Email</th>
+               <th className='role'>Role</th>               
+               <th className='action'>Actions</th>
             </tr>  
            </thead>
             <tbody>            
@@ -155,12 +174,10 @@ const Table=()=>{
                       <EditableRow editFormData={editFormData} handleEditRowValue={handleEditRowValue } 
                       handleCancelClick={handleCancelClick} handleSaveLink={handleSaveLink}
                       handleCheckBox={handleCheckBox}
-                      // checked={user?.isChecked || false}
                       /> :
                       <ReadRow rowValue={data} deleteRow={deleteRowValue} 
                       handleEditClick={handleEditClick}
                       handleCheckBox={handleCheckBox}
-                      // checked={user?.isChecked || false}
                       />                    
                   }
                   </tr>
@@ -171,7 +188,13 @@ const Table=()=>{
 
          {/* Pagination */}
          <div style={mystyle} >
-            <Pagination handleDeleteMultiple={handleDeleteMultiple}/>
+           {tableData.length ?
+            <Pagination 
+            tableData={tableData}
+            filterTableData={filterTableData}
+            handleDeleteMultiple={handleDeleteMultiple} 
+            handlePagination={handlePagination}/> : null}
+ 
          </div>
         </>
       );

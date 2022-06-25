@@ -6,12 +6,11 @@ const ReadRow = ({rowValue,deleteRow,handleEditClick,handleCheckBox}) => {
   return (
         <>
         <td><input  name={rowValue.id} 
-        // checked={checked}
         type="checkbox" className="checkbox" 
         onChange={(e)=>handleCheckBox(e)}/></td>
-         <td>{rowValue.name}</td>
-         <td>{rowValue.email}</td>
-         <td>{rowValue.role}</td>       
+         <td className='name'>{rowValue.name}</td>
+         <td className='email'>{rowValue.email}</td>
+         <td className='role'>{rowValue.role}</td>       
          <td>
                 <button onClick={()=>deleteRow(rowValue.id)}><FaRegTrashAlt  /></button> 
                 <button onClick={(e)=>handleEditClick(e,rowValue)}><BiEdit /></button> 

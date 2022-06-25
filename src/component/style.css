@@ -30,9 +30,41 @@ table {
   }
 
   .circle{
+    margin: 0px 20px;
     height: 25px;
     width: 25px;
     background-color: #bbb;
     border-radius: 50%;
     display: inline-block;
+  }
+
+  /* .checkbox{
+    width:10%
+  }
+
+  .name{
+     width:30%;
+  }
+  .email{
+    width:30%;
+  }
+  .role{
+    width:10%
+  } */
+  .Pagination-button{
+    display:flex;
+    justify-content:space-between
+  }
+
+  #main {
+    display: flex;
+  }
+  #delete-btn {
+    width: 200px;
+  }
+  .delete-multiple{
+    background-color: red;
+  }
+  #wide {
+    flex: 1;
   }

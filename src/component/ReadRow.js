@@ -8,9 +8,9 @@ const ReadRow = ({inputBoxTest,rowValue,deleteRow,handleEditClick,handleCheckBox
         <td><input  name={rowValue.id} checked={inputBoxTest}
         type="checkbox" className="checkbox" 
         onChange={(e)=>handleCheckBox(e)}/></td>
-         <td className='name'>{rowValue.name}</td>
-         <td className='email'>{rowValue.email}</td>
-         <td className='role'>{rowValue.role}</td>       
+         <td >{rowValue.name}</td>
+         <td >{rowValue.email}</td>
+         <td >{rowValue.role}</td>       
          <td>
                 <button onClick={()=>deleteRow(rowValue.id)}><FaRegTrashAlt  /></button> 
                 <button onClick={(e)=>handleEditClick(e,rowValue)}><BiEdit /></button> 

@@ -27,19 +27,6 @@ table {
     display: inline-block;
   }
 
-  /* .checkbox{
-    width:10%
-  }
-
-  .name{
-     width:10%;
-  }
-  .email{
-    width:20%;
-  }
-  .role{
-    width:20%
-  } */
   #pagination-button{
     display:flex;
     justify-content:space-between;

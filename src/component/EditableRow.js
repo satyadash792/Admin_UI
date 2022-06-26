@@ -10,7 +10,6 @@ const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelC
           required="required"
           placeholder="Enter a name..."
           name="name"
-          className='name'
           onChange={handleEditRowValue }
           value={editFormData.name}
         ></input>
@@ -21,7 +20,6 @@ const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelC
           required="required"
           placeholder="Enter a email..."
           name="email"
-          className='email'
           onChange={handleEditRowValue }
           value={editFormData.email}
         ></input>
@@ -32,7 +30,6 @@ const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelC
           required="required"
           placeholder="Enter a role..."
           name="role"
-          className='role'
           onChange={handleEditRowValue }
           value={editFormData.role}
         ></input>

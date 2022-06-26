@@ -7,6 +7,9 @@ table {
   
   td, th {
     border: 1px solid #dddddd;
+    border-left: none;
+    border-right: none;
+    width: 20px;
     text-align: left;
     padding: 8px;
   }
@@ -15,21 +18,6 @@ table {
     background-color: #dddddd;
   }
   
-  /* .delete-multiple{
-    border-radius: 30%;
-  } */
-
-  .rectangle{
-    border-left: none;
-    border-right: none;
-  }
-
-  .semi-circle{
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-  }
-
   .circle{
     margin: 0px 20px;
     height: 25px;
@@ -44,27 +32,37 @@ table {
   }
 
   .name{
-     width:30%;
+     width:10%;
   }
   .email{
-    width:30%;
+    width:20%;
   }
   .role{
-    width:10%
+    width:20%
   } */
-  .Pagination-button{
+  #pagination-button{
     display:flex;
-    justify-content:space-between
+    justify-content:space-between;
+    margin: 10px 20px;
   }
 
   #main {
     display: flex;
   }
+
   #delete-btn {
     width: 200px;
   }
   .delete-multiple{
-    background-color: red;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color:rgb(237, 17, 68);
   }
   #wide {
     flex: 1;

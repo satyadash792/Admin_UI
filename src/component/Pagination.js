@@ -11,36 +11,31 @@ const Pagination = ({tableData,searchTableData, filterTableData,handleDeleteMult
     pageNumber.push(i)
   }
 
-
+ //click on page no move to that page
   const pageDetails=(e)=>{
-    setCurrentPages(e.target.innerText)
-    handlePagination(e.target.innerText,postPerPage,searchTableData)
+    setCurrentPages(parseInt(e.target.innerText))
+    handlePagination(parseInt(e.target.innerText),postPerPage,searchTableData)
   }
 
-  //previous page
+  //Move to first page data
   const getFirstPageData=(e)=>{
     setCurrentPages(1)
     handlePagination(1,postPerPage,searchTableData)
   }
 
+  //Move to previous page 
   const getPreviousPageData=(e)=>{
-    if(currentPage===1){
-      alert("You are in FirstPage")
-      return
-    }
     setCurrentPages(currentPage-1)
     handlePagination(currentPage-1,postPerPage,searchTableData)
   }
 
+  //Move to the next page
   const getNextPageData=(e)=>{
-    if(currentPage===totalPages){
-      alert("You are in LastPage")
-      return
-    }
-    setCurrentPages(currentPage+1)
-    handlePagination(currentPage+1,postPerPage,searchTableData)
+    setCurrentPages(parseInt(currentPage)+1)
+    handlePagination(parseInt(currentPage)+1,postPerPage,searchTableData)
   }
 
+  //Move to last page
   const getLastPageData=(e)=>{
     setCurrentPages(totalPages)
     handlePagination(totalPages,postPerPage,searchTableData)
@@ -54,23 +49,22 @@ const Pagination = ({tableData,searchTableData, filterTableData,handleDeleteMult
             <div id="main">
             <div id="delete-btn">
             <button className="delete-multiple" onClick={handleDeleteMultiple}>
-                                       <span className='semi-circle'></span>
-                                       <span className='rectangle'>Delete Selected</span>
-                                       <span className='semi-circle'></span>
+                            Delete Selected
             </button>
             </div>
-            {/* <div id="Pagination-button"> */}
+            <div id="pagination-button">
             <button className={currentPage === 1 ? "disabled circle" :  "passive circle"}  disabled={currentPage === 1 ? true : false} onClick={(e)=>getFirstPageData(e)}><FaAngleDoubleLeft/></button>
             <button className={currentPage === 1 ? "disabled circle" :  "passive circle"}  disabled={currentPage === 1 ? true : false} onClick={(e)=>getPreviousPageData(e)}><FaAngleLeft/></button>
             {
               pageNumber.map((page)=>
               (
-              <button  className={currentPage === page ? "active circle" : "passive circle"} onClick={(e)=>pageDetails(e)}>{page}</button>
-              ))
+              <button key={page} className={currentPage === page ? "active circle" : "passive circle"} onClick={(e)=>pageDetails(e)}>{page}</button>
+              ) 
+              )
             }
             <button className={currentPage === totalPages ? "disabled circle" :  "passive circle"}  disabled={currentPage === totalPages ? true : false} onClick={(e)=>getNextPageData(e)}><FaAngleRight/></button>
             <button className={currentPage === totalPages ? "disabled circle" :  "passive circle"}  disabled={currentPage === totalPages ? true : false} onClick={(e)=>getLastPageData(e)}><FaAngleDoubleRight/></button>
-            {/* </div> */}
+            </div>
             </div>
         </>
   );

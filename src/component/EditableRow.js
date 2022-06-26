@@ -1,8 +1,6 @@
 import React from "react";
 
-const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelClick,handleSaveLink,handleCheckBox}) => {
-  console.log(inputBoxTest)
-  debugger;
+const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelClick,handleSaveClick,handleCheckBox}) => {
   return (
     <>
     <td><input type="checkbox" checked={inputBoxTest} name={editFormData.id}  className="checkbox" onChange={(e)=>handleCheckBox(e)}/></td>
@@ -41,7 +39,7 @@ const EditableRow = ({inputBoxTest,editFormData,handleEditRowValue,handleCancelC
      </td>  
      <td>
             <button onClick={handleCancelClick}>Cancel</button> 
-            <button onClick={(e)=>handleSaveLink(e)} >Save</button> 
+            <button onClick={(e)=>handleSaveClick(e)} >Save</button> 
     </td> 
     </>
   );

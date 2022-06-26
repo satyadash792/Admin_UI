@@ -3,8 +3,6 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import {  BiEdit  } from "react-icons/bi";
 
 const ReadRow = ({inputBoxTest,rowValue,deleteRow,handleEditClick,handleCheckBox}) => {
-  console.log(inputBoxTest)
-  debugger;
   return (
         <>
         <td><input  name={rowValue.id} checked={inputBoxTest}

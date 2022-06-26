@@ -22,7 +22,6 @@ const Table=()=>{
       email: "",
       role:""
     });
-    const [user, setUser]=useState([])
     const [paginationDetails, setPaginationDetails]=useState({
       page:1,
       rowPerPage:5
@@ -39,12 +38,12 @@ const Table=()=>{
     //Delete Row value completely
     const deleteRowValue=(data)=>{
        const tableAfterDeletion = [...tableData];
-       const index = tableAfterDeletion.findIndex((row) => row.id == data);
+       const index = tableAfterDeletion.findIndex((row) => row.id === data);
        tableAfterDeletion.splice(index, 1);
        setTableData(tableAfterDeletion)
        
        const tableAfterDeletionFilter = [...searchTableData];
-       const index2 = tableAfterDeletionFilter.findIndex((row) => row.id == data);
+       const index2 = tableAfterDeletionFilter.findIndex((row) => row.id === data);
        tableAfterDeletionFilter.splice(index2, 1);
        setFilterTableData(tableAfterDeletionFilter)
        setSearchTableData(tableAfterDeletionFilter)
@@ -80,7 +79,7 @@ const Table=()=>{
     setEditFormData(formValues);
   };
 
-  //handle editing of column
+  //handle editing of rowsValue
    const handleEditRowValue = (event) => {
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -92,14 +91,12 @@ const Table=()=>{
 
 
   //handle saving of editing values
-  const handleSaveLink= (e)=>{
-    debugger;
-     e.preventDefault()
-     const newTableData = [...filterTableData];
+  const handleSaveClick= (e)=>{
+     const newTableData = [...searchTableData];
      const index = newTableData.findIndex((row) => row.id === editRowId);
      newTableData[index] = editFormData;
-     setFilterTableData(newTableData)
-
+     setSearchTableData(newTableData)
+     
      const newTableData2 = [...tableData];
      const index2 = newTableData2.findIndex((row) => row.id === editRowId);
      newTableData2[index2] = editFormData;
@@ -138,15 +135,12 @@ const Table=()=>{
   const handleCheckBox=(e)=>{
     const {name,checked}=e.target
     if(name==="allChecked"){
-      debugger;
       let checkedBox=filterTableData.map( user => {return {...user,isChecked: checked}} ) 
       setFilterTableData(checkedBox)
     }
     else{
-    console.log(user.id===name)
     let checkedBox=filterTableData.map( user => user.id == name ? {...user , isChecked: checked}: user )
     setFilterTableData(checkedBox)
-    debugger;
     }
   }
 
@@ -156,7 +150,6 @@ const Table=()=>{
     setPaginationDetails({ page:currentPage,  rowPerPage:postPerPage})
     const startIndex=(currentPage-1)*postPerPage;
     const lastIndex=currentPage*postPerPage;
-    console.log("start "+startIndex +"  last "+lastIndex)
     const displayRow=data.slice(startIndex,lastIndex)
     setFilterTableData(displayRow)
   }
@@ -173,7 +166,7 @@ const Table=()=>{
           <thead>
             <tr>
                <th> <input type="checkbox" name="allChecked" className='checkbox'
-               checked={filterTableData.filter((user)=>user?.isChecked !==true).length===0}
+               checked={filterTableData.length>0 ? filterTableData.filter((user)=>user?.isChecked !==true).length===0 : false}
                 onChange={(e)=>handleCheckBox(e)}/></th>
                <th className='name'>Name</th>
                <th className='email'>Email</th>
@@ -187,7 +180,7 @@ const Table=()=>{
                   <tr key={data.id}>
                   {editRowId === data.id ?
                       <EditableRow editFormData={editFormData} handleEditRowValue={handleEditRowValue } 
-                      handleCancelClick={handleCancelClick} handleSaveLink={handleSaveLink}
+                      handleCancelClick={handleCancelClick} handleSaveClick={handleSaveClick}
                       inputBoxTest={data?.isChecked || false}
                       handleCheckBox={handleCheckBox}
                       /> :

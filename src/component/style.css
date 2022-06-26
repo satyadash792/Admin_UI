@@ -1,4 +1,4 @@
-/* Table.js */
+
 table {
     border-collapse: collapse;
     width: 90%;
@@ -55,7 +55,7 @@ table {
     flex: 1;
   }
 
-  /* Pagination.js */
+
   .active{
     background-color: white;
   }
